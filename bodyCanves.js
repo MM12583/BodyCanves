@@ -9,7 +9,7 @@ context.font = "bold 12px Montserrat";
 
 // 渲染數據
 // 之後作為非同步請求Ajax OK
-// 之後要做 取七天期間日期
+// 之後要做 取七天期間日期 解決 NULL + 顯示控長條圖******
 function renderExerciseData() {
   
   for (let i = 0; i < 8; i++) {
@@ -18,8 +18,8 @@ function renderExerciseData() {
     // 間隔
     let intervalH = i * 75;
     // 抓近七天 ***
-    let weekDays = ["8/6", "8/7", "8/8", "8/9", "8/10", "8/10", "8/11"];
-    context.fillText(weekDays[i], intervalH + 35, 218);
+    // let weekDays = ["8/2", "8/3", "8/4", "8/5", "8/6", "8/7", "8/8"];
+    context.fillText(weekDays[i], intervalH + 30, 218);
     
     // 長條圖顏色
     context.fillStyle = "#6460ff"
@@ -37,8 +37,8 @@ function renderExerciseData() {
 
 // 非同步請求
 // To Server requset for UserDailyRecord
+let weekDays = [] ;
 let kaclData = [] ;
-// let weekDays = [] ;
 function getUserDailyRecord() {
   fetch(`/testGraphic`)
     .then(response => {
@@ -46,27 +46,17 @@ function getUserDailyRecord() {
     })
     .then(data => {
       console.log(data);
-      // 抓七天 消耗卡洛里
-      kaclData = [
-        data[0].kcalBurned,
-        data[1].kcalBurned,
-        data[2].kcalBurned,
-        data[3].kcalBurned,
-        data[4].kcalBurned,
-        data[5].kcalBurned,
-        data[6].kcalBurned];
-      console.log(kaclData);
-      // // 抓七天 日期
-      // weekDays = [
-      //   data[0].date,
-      //   data[1].date,
-      //   data[2].date,
-      //   data[3].date,
-      //   data[4].date,
-      //   data[5].date,
-      //   data[6].date];
+      // console.log(data[0][1]);
+      for(let i = 0; i < 7; i++){
+        weekDays.push(data[i][0]) ;
+        kaclData.push(data[i][1]) ;
+      }
       // console.log(weekDays);
-    }).then(() => renderExerciseData())
+      // console.log(kaclData);
+
+    }).then(() => 
+    renderExerciseData()
+    );
 }
 
 // window load 開始畫基本Canvas
